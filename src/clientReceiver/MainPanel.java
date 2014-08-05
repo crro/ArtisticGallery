@@ -106,11 +106,19 @@ public class MainPanel extends JPanel{
 						//we need to find a way to uniquely identify figures and 
 						//have that sent directly to the server. Maybe smart figure?
 					} else if (typeOfFigure.equals("ellipse")) {
-						Network
+						NetworkEllipse shape  = new NetworkEllipse(dp.getDrawingPanel(), in.readLine());
 					} else if (typeOfFigure.equals("rectangle")) {
 						
+						DrawingPanel drawP = dp.getDrawingPanel(); 
+						NetworkRectangle shape  = new NetworkRectangle(drawP, in.readLine());
+						shape.setSize(30,30);
+						shape.setVisible(true);
+						shape.setFillColor(java.awt.Color.BLUE);
+						shape.setBorderWidth(1);
+						shape.setLocation(30,30);
+						
 					} else {
-						//wrong ficture
+						//wrong figure
 					}
 				} else if (fromServer.equals("Update")) {
 					//2 or three depends on the action
