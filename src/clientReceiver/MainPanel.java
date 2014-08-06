@@ -263,28 +263,24 @@ public class MainPanel extends JPanel{
 	}
 
 	public void removeFromPanels(String artistName) {
+		DisplayPanel dp;
 		if (_activeArtists > 1) {
 			switch (_activeArtists) {
 				case 1:
 					dp = _artists.remove(artistName);
 					_artists.put("One", dp);
-					dp.addText(welcomeMessage);
 					break;
 				case 2:
 					dp = _artists.remove(artistName);
 					_artists.put("Two", dp);
-					dp.addText(welcomeMessage);
 					break;
 				case 3:
 					dp = _artists.remove(artistName);
 					_artists.put("Three", dp);
-					dp.addText(welcomeMessage);
-
 					break;
 				case 4:
 					dp = _artists.remove(artistName);
 					_artists.put("Four", dp);
-					dp.addText(welcomeMessage);
 					break;
 				default:
 			}

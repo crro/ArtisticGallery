@@ -15,13 +15,15 @@ import javax.swing.JPanel;
 public class DrawingPanel extends JPanel {
 	private ArrayList<Shape> _shapes;
 	private Shape _holderShape;
+	private MainPanel _mp;
 
-	public DrawingPanel() {
+	public DrawingPanel(MainPanel mp) {
 		_shapes = new ArrayList<Shape>();
 		this.setPreferredSize(new Dimension(500, 500));
 		this.setBackground(java.awt.Color.WHITE);
 		this.addMouseListener(new ClickListener());
 		this.addMouseMotionListener(new MotionListener());
+		_mp = mp;
 	}
 	/*
 	 * This method paints the proxy, it loops through the border and paints it
@@ -92,13 +94,9 @@ public class DrawingPanel extends JPanel {
 			System.out.println("y: " + e.getY());
 			_holderShape.setLocation(e.getX(), e.getY());
 			DrawingPanel.this.repaint();
-//			int size = _shapes.size();
-//			for (int i = 0; i < size; i++) {
-//				if (_shapes.get(i).contains(e.getPoint())) {
-//					_shapes.get(i).setLocation(e.getX(), e.getY());
-//					DrawingPanel.this.repaint();
-//				}
-//			}
+			_mp.sendUpdate("Location", String.valueOf(e.getX()), String.valueOf(e.getY()));
+			//Here is where we need to send the signal to the server
+			//We probably need a reference to the MainPanel here.
 		}
 		public void mouseMoved(MouseEvent e) {
 			System.out.print("x: " + e.getX() + " ");

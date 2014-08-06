@@ -51,7 +51,7 @@ public class App {
 			
 			//doc.insertString(doc.getLength(), in.readLine() + "\n", null);
 			while((fromServer = in.readLine()) != null) {
-				if fromServer.equals("Connect") {
+				if (fromServer.equals("Connect")) {
 					_mPanel.addToPanel(in.readLine(), in.readLine());
 				}
 				if (fromServer.equals("Create")) {
@@ -72,12 +72,10 @@ public class App {
 					} else {
 						//unkown update
 					}
-					_mPanel.updateShape();
 				} else if (fromServer.equals("Disconnect")){
-					_mPanel.sendText(in.readLine());
+					_mPanel.removeFromPanels(in.readLine());
 				} else if (fromServer.equals("Text")){
-					_mPanel.sendText(in.readLine());
-					_mPanel.sendText(in.readLine());
+					_mPanel.sendText(in.readLine(), in.readLine());//artistName, text
 				} else {
 
 				}

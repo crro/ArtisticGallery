@@ -94,10 +94,10 @@ public class Server {
 						//Invalid command
 						this.sendMessage("Disconnect");
 						this.sendMessage(in.readLine());//This is the artist id
-					} else if (formClient.equals("Text")){
+					} else if (fromClient.equals("Text")){
 						this.sendMessage("Text");
-						this.sendMessage(in.readLine);//identifier
-						this.sendMessage(in.readLine);//message
+						this.sendMessage(in.readLine());//identifier
+						this.sendMessage(in.readLine());//message
 					} else {
 
 					}

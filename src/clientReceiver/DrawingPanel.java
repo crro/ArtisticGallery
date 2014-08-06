@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.HashMap;
+import java.util.Set;
 
 import javax.swing.JPanel;
 
@@ -59,7 +60,7 @@ public class DrawingPanel extends JPanel{
 
 	//This method is called when a piece needs to move from the server.
 	public void moveShape(String key, String x, String y) {
-		Shape s = _shape.get(key);
+		Shape s = _shapes.get(key);
 		s.setLocation(Double.parseDouble(x), Double.parseDouble(y));
 		this.repaint();
 	}

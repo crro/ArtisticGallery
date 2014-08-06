@@ -45,7 +45,7 @@ public class MainPanel extends JPanel {
 		textPanel.add(_messageArea);
 		this.add(textPanel, BorderLayout.EAST);
 		
-		_dPanel = new DrawingPanel();
+		_dPanel = new DrawingPanel(this);
 		this.add(_dPanel, BorderLayout.CENTER);
 		
 		JPanel shapePanel  =  new JPanel();
