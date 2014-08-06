@@ -27,8 +27,7 @@ public class Server {
 				Socket clientSocket = serverSocket.accept();
 				PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
 				BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-				ObjectInputStream oIS = new ObjectInputStream(clientSocket.getInputStream());
-				String fromClient = (String) oIS.readObject();
+				String fromClient = in.readLine();
 				System.out.println(fromClient);
 				if (fromClient.equals("Connect")) {
 					
@@ -50,20 +49,20 @@ public class Server {
 					this.sendMessage(in.readLine());//Send the connection message
 				} else if (fromClient.equals("Receive")) {
 					out.println("Connection Established: Receive");
-					File file = new File("sample.txt");
-					 
-					// if file doesn't exists, then create it
-					if (!file.exists()) {
-						_sockets.add(new Holder(clientSocket, out));
-						continue;
-					}
-					FileReader fw = new FileReader(file.getAbsoluteFile());
-					BufferedReader bw = new BufferedReader(fw);
-					String line;
-					while ((line = in.readLine()) != null) {
-						out.println(line);
-					}
-					bw.close();
+//					File file = new File("sample.txt");
+//					 
+//					// if file doesn't exists, then create it
+//					if (!file.exists()) {
+//						_sockets.add(new Holder(clientSocket, out));
+//						continue;
+//					}
+//					FileReader fw = new FileReader(file.getAbsoluteFile());
+//					BufferedReader bw = new BufferedReader(fw);
+//					String line;
+//					while ((line = in.readLine()) != null) {
+//						out.println(line);
+//					}
+//					bw.close();
 					_sockets.add(new Holder(clientSocket, out));
 					System.out.println("The size of the arraylist is: " + _sockets.size());
 				}  else if (fromClient.equals("Send")) {
@@ -73,13 +72,17 @@ public class Server {
 						//We create a new object and send it to the receiver
 						this.sendMessage("Create");
 						this.sendMessage(in.readLine());//Identifier of the artist
+						this.sendMessage(in.readLine());//The figure id
 						this.sendMessage(in.readLine());//We send the type (Ellipse, square or triangle)
 						//The color is blue by default
 					} else if (fromClient.equals("Update")) {
 						//We send the HashMap to the receiver.
 						this.sendMessage("Update");
 						this.sendMessage(in.readLine());//The artist identifier
+						this.sendMessage(in.readLine());//The figure identifier
 						String typeOfChange = in.readLine();
+						this.sendMessage(typeOfChange);
+						
 						if (typeOfChange.equals("Background")) {
 							this.sendMessage(in.readLine());//Type of color
 						} else if (typeOfChange.equals("Location")) {
@@ -87,8 +90,10 @@ public class Server {
 							this.sendMessage(in.readLine());//y
 						}
 						
-					} else {
+					} else if (fromClient.equals("Update")) {
 						//Invalid command
+					} else {
+						
 					}
 				} else {
 					out.println("Wrong Protocol");

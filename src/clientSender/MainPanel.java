@@ -76,18 +76,28 @@ public class MainPanel extends JPanel {
 				NetworkRectangle shape = new NetworkRectangle(_dPanel, Integer.toString(_nextIdentifier));
 				_nextIdentifier++;
 				//send it to the server
+				shape.setSize(30,30);
+				shape.setVisible(true);
+				shape.setFillColor(java.awt.Color.BLUE);
+				shape.setBorderColor(java.awt.Color.GREEN);
+				shape.setBorderWidth(1);
+				shape.setLocation(30,30);
+				_dPanel.addShape(shape);
+				sendCreate("rectangle", shape.getIdentifier());
 			} else {
 				NetworkEllipse shape = new NetworkEllipse(_dPanel, Integer.toString(_nextIdentifier));
 				_nextIdentifier++;
 				//send it to the server
+				shape.setSize(30,30);
+				shape.setVisible(true);
+				shape.setFillColor(java.awt.Color.BLUE);
+				shape.setBorderColor(java.awt.Color.GREEN);
+				shape.setBorderWidth(1);
+				shape.setLocation(30,30);
+				_dPanel.addShape(shape);
+				sendCreate("ellipse", shape.getIdentifier());
 			}
-			shape.setSize(30,30);
-			shape.setVisible(true);
-			shape.setFillColor(java.awt.Color.BLUE);
-			shape.setBorderColor(java.awt.Color.GREEN);
-			shape.setBorderWidth(1);
-			shape.setLocation(30,30);
-			_dPanel.addShape(shape);
+			
 		}
 
 
@@ -118,14 +128,16 @@ public class MainPanel extends JPanel {
 		}
 	}
 	
-	public void sendCreate(String type) {
+	public void sendCreate(String type, String identifier) {
 		try (
 				Socket soc = new Socket("localhost", 4444);
 				PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
 				BufferedReader in = new BufferedReader(new InputStreamReader(soc.getInputStream()));
 				) {
+			out.println("Send");
 			out.println("Create");
 			out.println(_artistName);
+			out.println(identifier);
 			out.println(type);
 		} catch (UnknownHostException e1) {
 			// TODO Auto-generated catch block
@@ -142,7 +154,7 @@ public class MainPanel extends JPanel {
 				PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
 				BufferedReader in = new BufferedReader(new InputStreamReader(soc.getInputStream()));
 				) {
-
+			out.println("Send");
 			out.println("Update");
 			out.println(_artistName);
 			if (type.equals("Background")) {

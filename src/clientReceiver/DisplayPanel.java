@@ -18,6 +18,7 @@ public class DisplayPanel extends JPanel {
 		_textPane.setSize(500, 100);
 		_textPane.setVisible(true);
 		this.add(_textPane, BorderLayout.SOUTH);
+		this.setVisible(true);
 		
 	}
 	

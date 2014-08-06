@@ -5,7 +5,6 @@ import gfx.Shape;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JPanel;
@@ -19,6 +18,7 @@ public class DrawingPanel extends JPanel{
 		_shapes = new HashMap<String, Shape>();
 		this.setPreferredSize(new Dimension(200, 200));
 		this.setBackground(java.awt.Color.YELLOW);
+		this.setVisible(true);
 	}
 	/*
 	 * This method paints the proxy, it loops through the border and paints it
@@ -28,10 +28,14 @@ public class DrawingPanel extends JPanel{
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D brush = (Graphics2D) g;//Coercion
-		int size = _shapes.size();
-		for (int i = 0; i < size; i++) {
-			_shapes.get(i).paint(brush);
-		}
+		if (_shapes.get("0") != null ) {
+			_shapes.get("0").paint(brush);
+			
+		} 
+//		int size = _shapes.size();
+//		for (int i = 0; i < size; i++) {
+//			_shapes.get(i).paint(brush);
+//		}
 	}
 	
 	public void addShape(String name, Shape s) {
@@ -47,5 +51,16 @@ public class DrawingPanel extends JPanel{
 		return _shapes.isEmpty();
 	}
 	
+	public void changeColor(String id, String color) {
+		Shape s = _shapes.get(id);
+		if (color.equals("yellow")) {
+			s.setFillColor(java.awt.Color.YELLOW);
+		}
+	}
+	
+	public void move(String id, String x, String y) {
+		Shape s = _shapes.get(id);
+		s.setLocation(Double.parseDouble(x), Double.parseDouble(y));
+	}
 
 }
