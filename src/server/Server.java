@@ -90,10 +90,16 @@ public class Server {
 							this.sendMessage(in.readLine());//y
 						}
 						
-					} else if (fromClient.equals("Update")) {
+					} else if (fromClient.equals("Disconnect")) {
 						//Invalid command
+						this.sendMessage("Disconnect");
+						this.sendMessage(in.readLine());//This is the artist id
+					} else if (formClient.equals("Text")){
+						this.sendMessage("Text");
+						this.sendMessage(in.readLine);//identifier
+						this.sendMessage(in.readLine);//message
 					} else {
-						
+
 					}
 				} else {
 					out.println("Wrong Protocol");

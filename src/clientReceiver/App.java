@@ -51,10 +51,35 @@ public class App {
 			
 			//doc.insertString(doc.getLength(), in.readLine() + "\n", null);
 			while((fromServer = in.readLine()) != null) {
+				if fromServer.equals("Connect") {
+					_mPanel.addToPanel(in.readLine(), in.readLine());
+				}
 				if (fromServer.equals("Create")) {
 					_mPanel.createShape(in.readLine(), in.readLine(), in.readLine());
-				} else {
+				} else if (fromServer.equals("Update")){
 					//no real message
+					String artistName = in.readLine();
+					String figureId = in.readLine();
+					String typeOfChange = in.readLine();
+					if (typeOfChange.equals("Background")) {
+						//we read once for the color
+						_mPanel.updateShape(artistName, figureId,
+							typeOfChange, in.readLine(), null);
+					} else if (typeOfChange.equals("Location")) {
+						//we read twice for the x and y
+						_mPanel.updateShape(artistName, figureId,
+							typeOfChange, in.readLine(), in.readLine());
+					} else {
+						//unkown update
+					}
+					_mPanel.updateShape();
+				} else if (fromServer.equals("Disconnect")){
+					_mPanel.sendText(in.readLine());
+				} else if (fromServer.equals("Text")){
+					_mPanel.sendText(in.readLine());
+					_mPanel.sendText(in.readLine());
+				} else {
+
 				}
 			}
 		}

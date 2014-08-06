@@ -27,7 +27,7 @@ public class MainPanel extends JPanel{
 	
 	public MainPanel(String hostName, int portNum) throws BadLocationException {
 		this.setLayout(new BorderLayout());
-		_activeArtists = 1;
+		_activeArtists = 0;
 		_artists = new HashMap<String, DisplayPanel>();
 		_artistPanel = new JPanel();
 		_artistPanel.setLayout(new GridLayout(2,2));
@@ -178,44 +178,24 @@ public class MainPanel extends JPanel{
 					}
 				} else if (fromServer.equals("Update")) {
 					//update
-					//2 or three depends on the action
-					String artistName = in.readLine();
-					DrawingPanel drawP = _artists.get(artistName).getDrawingPanel();
-					String identifier = in.readLine();//figure
-					String typeOfChange = in.readLine();
-					if (typeOfChange.equals("Background")) {
-						
-						
-					} else if (typeOfChange.equals("Location")) {
-						
-						
-					} else {
-						//no real message
-					}
+					
 				} else {
 					//no real message
 				}
-//				String[] words = fromServer.split(" ");
-//				String name = words[0];
-//				int nameSize = words[0].length();
-//				String message = fromServer.substring(nameSize);
-//				SimpleAttributeSet attributes = new SimpleAttributeSet();
-//			    attributes.addAttribute(StyleConstants.CharacterConstants.Bold, Boolean.TRUE);
-//				doc.insertString(doc.getLength(), name, attributes);
-//				doc.insertString(doc.getLength(), message + "\n", null);
+//				
 			}
 		}
 	}
 	public void createShape(String artist, String id, String type) {
 		String artistName = artist;
-		DisplayPanel dp = _artists.get("One");
+		DisplayPanel dp = _artists.get(artist);
 		String typeOfFigure = type;
 		if (typeOfFigure.equals("triangle")) {
 			//we need to find a way to uniquely identify figures and 
 			//have that sent directly to the server. Maybe smart figure?
 		} else if (typeOfFigure.equals("ellipse")) {
 			DrawingPanel drawP = dp.getDrawingPanel(); 
-			NetworkEllipse shape = new NetworkEllipse(dp.getDrawingPanel(), id);
+			NetworkEllipse shape = new NetworkEllipse(drawP, id);
 			shape.setSize(30,30);
 			shape.setVisible(true);
 			shape.setFillColor(java.awt.Color.BLUE);
@@ -236,5 +216,86 @@ public class MainPanel extends JPanel{
 		} else {
 			//wrong figure
 		}
+	}
+	public void updateShape(String artistName, String id, 
+		String typeOfChange, String update1, String update2) {
+		//2 or three depends on the action
+		DrawingPanel drawP = _artists.get(artistName).getDrawingPanel();
+		if (typeOfChange.equals("Background")) {
+			drawP.repaintShape(id, update1);
+		} else if (typeOfChange.equals("Location")) {
+			drawP.moveShape(id, update1, update2);
+		} else {
+			//no real message
+		}
+	}
+	public void addToPanel(String artistName, String welcomeMessage) {
+		DisplayPanel dp;
+		if (_activeArtists < 4) {
+			switch (_activeArtists) {
+				case 0:
+					dp = _artists.remove("One");
+					_artists.put(artistName, dp);
+					dp.addText(welcomeMessage);
+					break;
+				case 1:
+					dp = _artists.remove("Two");
+					_artists.put(artistName, dp);
+					dp.addText(welcomeMessage);
+					break;
+				case 2:
+					dp = _artists.remove("Three");
+					_artists.put(artistName, dp);
+					dp.addText(welcomeMessage);
+
+					break;
+				case 3:
+					dp = _artists.remove("Four");
+					_artists.put(artistName, dp);
+					dp.addText(welcomeMessage);
+					break;
+				default:
+			}
+			_activeArtists++;
+		} else {
+						//dismiss it
+		}
+	}
+
+	public void removeFromPanels(String artistName) {
+		if (_activeArtists > 1) {
+			switch (_activeArtists) {
+				case 1:
+					dp = _artists.remove(artistName);
+					_artists.put("One", dp);
+					dp.addText(welcomeMessage);
+					break;
+				case 2:
+					dp = _artists.remove(artistName);
+					_artists.put("Two", dp);
+					dp.addText(welcomeMessage);
+					break;
+				case 3:
+					dp = _artists.remove(artistName);
+					_artists.put("Three", dp);
+					dp.addText(welcomeMessage);
+
+					break;
+				case 4:
+					dp = _artists.remove(artistName);
+					_artists.put("Four", dp);
+					dp.addText(welcomeMessage);
+					break;
+				default:
+			}
+			_activeArtists--;
+		} else {
+			//There are no artists to remove
+		}
+	}
+
+	public void sendText(String artistName, String text) {
+		DisplayPanel dp = _artists.get(artistName);
+		dp.addText(text);
 	}
 }

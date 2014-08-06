@@ -28,10 +28,10 @@ public class DrawingPanel extends JPanel{
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D brush = (Graphics2D) g;//Coercion
-		if (_shapes.get("0") != null ) {
-			_shapes.get("0").paint(brush);
-			
-		} 
+		Set<String> keys = _shapes.keySet();
+		for (String key : keys) {
+			_shapes.get(key).paint(brush);
+		}
 //		int size = _shapes.size();
 //		for (int i = 0; i < size; i++) {
 //			_shapes.get(i).paint(brush);
@@ -43,19 +43,28 @@ public class DrawingPanel extends JPanel{
 		this.repaint();
 	}
 	
+	public void repaintShape(String key, String color) {
+		Shape s = _shapes.get(key);
+		if (color.equals("Blue")) {
+			s.setFillColor(java.awt.Color.BLUE);
+		} else if (color.equals("Yellow")) {
+			s.setFillColor(java.awt.Color.YELLOW);
+		} else if (color.equals("Green")) {
+			s.setFillColor(java.awt.Color.GREEN);
+		} else {
+			//undefined color
+		}
+		this.repaint();
+	}
+
 	//This method is called when a piece needs to move from the server.
-	public void move() {
-			
+	public void moveShape(String key, String x, String y) {
+		Shape s = _shape.get(key);
+		s.setLocation(Double.parseDouble(x), Double.parseDouble(y));
+		this.repaint();
 	}
 	public boolean isEmpty() {
 		return _shapes.isEmpty();
-	}
-	
-	public void changeColor(String id, String color) {
-		Shape s = _shapes.get(id);
-		if (color.equals("yellow")) {
-			s.setFillColor(java.awt.Color.YELLOW);
-		}
 	}
 	
 	public void move(String id, String x, String y) {
