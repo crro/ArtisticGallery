@@ -23,6 +23,7 @@ public class DisplayPanel extends JPanel {
 	}
 	
 	public void addText(String text) {
+		_textPane.setText("");
 		_textPane.append(text);
 	}
 	

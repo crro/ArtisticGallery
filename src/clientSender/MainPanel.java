@@ -33,7 +33,7 @@ public class MainPanel extends JPanel {
 		_messageArea = new JTextArea();
 		_messageArea.setPreferredSize(new Dimension(200, 500));
 		_messageArea.setVisible(true);
-		_artistName = "Kiho the Greatest";
+		_artistName = " van Gogh";
 		_nextIdentifier = 0;
 		
 		this.setSize(725, 700);
@@ -178,19 +178,19 @@ public class MainPanel extends JPanel {
 			if (_color.equals("blue")) {
 				_dPanel.setHolderColor(java.awt.Color.BLUE);
 				_dPanel.repaint();
-				sendUpdate("FillColor", null, "blue", null);
+				sendUpdate("FillColor", _dPanel.getHolderId(), "blue", null);
 			} else if (_color.equals("green")) {
 				_dPanel.setHolderColor(java.awt.Color.GREEN);
 				_dPanel.repaint();
-				sendUpdate("FillColor", null, "green", null);
+				sendUpdate("FillColor", _dPanel.getHolderId(), "green", null);
 			} else if (_color.equals("orange")) {
 				_dPanel.setHolderColor(java.awt.Color.ORANGE);
 				_dPanel.repaint();
-				sendUpdate("FillColor", null, "orange", null);
+				sendUpdate("FillColor", _dPanel.getHolderId(), "orange", null);
 			}else if (_color.equals("yellow")) {
 				_dPanel.setHolderColor(java.awt.Color.YELLOW);
 				_dPanel.repaint();
-				sendUpdate("FillColor", null, "yellow", null);
+				sendUpdate("FillColor", _dPanel.getHolderId(), "yellow", null);
 			} else {
 			}
 		}
@@ -235,6 +235,7 @@ public class MainPanel extends JPanel {
 					PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
 					BufferedReader in = new BufferedReader(new InputStreamReader(soc.getInputStream()));
 					) {
+				out.println("Send");
 				out.println("Disconnect");
 				out.println(_artistName);
 			} catch (UnknownHostException e1) {
@@ -261,9 +262,10 @@ public class MainPanel extends JPanel {
 				PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
 				BufferedReader in = new BufferedReader(new InputStreamReader(soc.getInputStream()));
 				) {
+			out.println("Send");
 			out.println("Text");
 			out.println(_artistName);
-			out.println(message);
+			out.println(message + "\n");
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
 		} catch (IOException e1) {
@@ -340,7 +342,7 @@ public class MainPanel extends JPanel {
 				_identifier = identifier;
 			}
 			out.println(_artistName);
-			out.println(_artistName + " is online now.");
+			out.println(_artistName + " is online now.\n");
 
 		} catch (UnknownHostException e1) {
 			// TODO Auto-generated catch block
@@ -372,6 +374,9 @@ public class MainPanel extends JPanel {
 	}
 	
 	public void sendUpdate(String typeOfChange, String figureId, String update1, String update2) {
+		if (typeOfChange.equals("FillColor") && figureId == null) {
+			return;
+		}
 		try (
 				Socket soc = new Socket("localhost", 4444);
 				PrintWriter out = new PrintWriter(soc.getOutputStream(), true);

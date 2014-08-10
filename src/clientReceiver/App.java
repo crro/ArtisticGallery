@@ -69,8 +69,9 @@ public class App {
 						//we read twice for the x and y
 						_mPanel.updateShape(artistName, figureId,
 							typeOfChange, in.readLine(), in.readLine());
-					} else {
-						//unkown update
+					} else if (typeOfChange.equals("FillColor")){
+						_mPanel.updateShape(artistName, figureId,
+								typeOfChange, in.readLine(), null);
 					}
 				} else if (fromServer.equals("Disconnect")){
 					_mPanel.removeFromPanels(in.readLine());

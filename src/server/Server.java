@@ -88,8 +88,9 @@ public class Server {
 						} else if (typeOfChange.equals("Location")) {
 							this.sendMessage(in.readLine());//x
 							this.sendMessage(in.readLine());//y
+						} else if (typeOfChange.equals("FillColor")) {
+							this.sendMessage(in.readLine());
 						}
-						
 					} else if (fromClient.equals("Disconnect")) {
 						//Invalid command
 						this.sendMessage("Disconnect");

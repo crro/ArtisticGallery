@@ -57,6 +57,8 @@ public class DrawingPanel extends JPanel {
 			for (String key : set) {
 				if (_shapes.get(key).contains(e.getPoint())) {
 					select = true;
+					_holderShape = _shapes.get(key);
+					_holderId = key;
 				}
 			}
 			if (!select) {
@@ -121,8 +123,14 @@ public class DrawingPanel extends JPanel {
 		
 	}
 	
+	public String getHolderId() {
+		return _holderId;
+	}
+	
 	public void setHolderColor(java.awt.Color color) {
-		_holderShape.setFillColor(color);
+		if (_holderShape != null) {
+			_holderShape.setFillColor(color);			
+		}
 		//this.repaint();
 	}
 

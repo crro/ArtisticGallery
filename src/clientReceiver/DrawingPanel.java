@@ -46,14 +46,29 @@ public class DrawingPanel extends JPanel{
 	
 	public void repaintShape(String key, String color) {
 		Shape s = _shapes.get(key);
-		if (color.equals("Blue")) {
+		if (color.equals("blue")) {
 			s.setFillColor(java.awt.Color.BLUE);
-		} else if (color.equals("Yellow")) {
+		} else if (color.equals("yellow")) {
 			s.setFillColor(java.awt.Color.YELLOW);
-		} else if (color.equals("Green")) {
+		} else if (color.equals("green")) {
 			s.setFillColor(java.awt.Color.GREEN);
-		} else {
+		} else if (color.equals("orange")){
 			//undefined color
+			s.setFillColor(java.awt.Color.ORANGE);
+		}
+		this.repaint();
+	}
+	
+	public void changeBackground(String color) {
+		if (color.equals("blue")) {
+			this.setBackground(java.awt.Color.BLUE);
+		} else if (color.equals("yellow")) {
+			this.setBackground(java.awt.Color.YELLOW);
+		} else if (color.equals("green")) {
+			this.setBackground(java.awt.Color.GREEN);
+		} else if (color.equals("orange")){
+			//undefined color
+			this.setBackground(java.awt.Color.ORANGE);
 		}
 		this.repaint();
 	}

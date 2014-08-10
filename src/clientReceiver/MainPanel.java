@@ -132,11 +132,12 @@ public class MainPanel extends JPanel{
 		//2 or three depends on the action
 		DrawingPanel drawP = _artists.get(artistName).getDrawingPanel();
 		if (typeOfChange.equals("Background")) {
-			drawP.repaintShape(id, update1);
+			drawP.changeBackground(update1);
 		} else if (typeOfChange.equals("Location")) {
 			drawP.moveShape(id, update1, update2);
-		} else {
-			//no real message
+		} else if (typeOfChange.equals("FillColor")){
+			drawP.repaintShape(id, update1);
+			
 		}
 	}
 	public void addToPanel(String artistName, String welcomeMessage) {
