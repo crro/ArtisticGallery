@@ -5,12 +5,6 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.HashMap;
 
 import javax.swing.JButton;
@@ -100,8 +94,15 @@ public class MainPanel extends JPanel{
 		DisplayPanel dp = _artists.get(artist);
 		String typeOfFigure = type;
 		if (typeOfFigure.equals("triangle")) {
-			//we need to find a way to uniquely identify figures and 
-			//have that sent directly to the server. Maybe smart figure?
+			DrawingPanel drawP = dp.getDrawingPanel(); 
+			NetworkTriangle shape = new NetworkTriangle(drawP, id);
+			shape.setSize(30,30);
+			shape.setVisible(true);
+			shape.setFillColor(java.awt.Color.BLUE);
+			shape.setBorderWidth(1);
+			shape.setLocation(30,30);
+			drawP.addShape(id, shape);
+			return;
 		} else if (typeOfFigure.equals("ellipse")) {
 			DrawingPanel drawP = dp.getDrawingPanel(); 
 			NetworkEllipse shape = new NetworkEllipse(drawP, id);
