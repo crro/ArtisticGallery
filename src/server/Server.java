@@ -81,7 +81,7 @@ public class Server {
 						this.sendMessage(in.readLine());//The artist identifier
 						this.sendMessage(in.readLine());//The figure identifier
 						String typeOfChange = in.readLine();
-						this.sendMessage(typeOfChange);
+						this.sendMessage(typeOfChange);//type of change
 						
 						if (typeOfChange.equals("Background")) {
 							this.sendMessage(in.readLine());//Type of color

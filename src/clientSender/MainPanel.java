@@ -1,11 +1,8 @@
 package clientSender;
 
-import gfx.ColorEllipse;
-import gfx.ColorRectangle;
-import gfx.Shape;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -16,6 +13,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
@@ -33,33 +31,244 @@ public class MainPanel extends JPanel {
 		//Setting th Layout
 		this.setLayout(new BorderLayout());
 		_messageArea = new JTextArea();
-		_messageArea.setPreferredSize(new Dimension(200, 400));
+		_messageArea.setPreferredSize(new Dimension(200, 500));
 		_messageArea.setVisible(true);
-		_artistName = "Picasso";
+		_artistName = "Kiho the Greatest";
 		_nextIdentifier = 0;
 		
-		this.setSize(500, 500);
-		this.setPreferredSize(new Dimension(500, 500));
+		this.setSize(725, 700);
+		this.setPreferredSize(new Dimension(725, 700));
 		this.setVisible(true);
+		//Adding the text panel and then adding the JTextArea
 		JPanel textPanel = new JPanel();
 		textPanel.add(_messageArea);
 		this.add(textPanel, BorderLayout.EAST);
 		
 		_dPanel = new DrawingPanel(this);
-		this.add(_dPanel, BorderLayout.CENTER);
+		JPanel dcPanel = new JPanel();
+		dcPanel.add(_dPanel);
+		this.add(dcPanel, BorderLayout.CENTER);
 		
-		JPanel shapePanel  =  new JPanel();
-		_rectangleBtn =  new JButton("Rectangle");
-		_rectangleBtn.addActionListener(new addShapeListener(1));
+		//So this will be the SoutPanel
+		JPanel southPanel = new JPanel();
+		southPanel.setLayout(new GridLayout(1,4));
 		
-		_circleButton =  new JButton("Circle");
-		_circleButton.addActionListener(new addShapeListener(2));
+		//Background Color block-----------------------------
+		JPanel backgroundColorP = new JPanel();
+		backgroundColorP.setLayout(new GridLayout(3,1));
+		JLabel title = new JLabel("Background Color");
+		//adding it to the background panel
+		backgroundColorP.add(title);
+			//blue
+		JButton blueButton = new JButton("blue");
+		blueButton.addActionListener(new BackgroundListener("blue"));
+			//orange
+		JButton orangeButton = new JButton("orange");
+		orangeButton.addActionListener(new BackgroundListener("orange"));
 		
+		JPanel aPanel = new JPanel();
+		aPanel.add(blueButton);
+		aPanel.add(orangeButton);
+		//adding them to the background
+		backgroundColorP.add(aPanel);
+			//yellow
+		JButton yellowButton = new JButton("yellow");
+		yellowButton.addActionListener(new BackgroundListener("yellow"));
+			//green
+		JButton greenButton = new JButton("green");
+		greenButton.addActionListener(new BackgroundListener("green"));
 		
-		shapePanel.add(_circleButton);
-		shapePanel.add(_rectangleBtn);
-		this.add(shapePanel, BorderLayout.SOUTH);
+		JPanel bPanel = new JPanel();
+		bPanel.add(yellowButton);
+		bPanel.add(greenButton);
+		//Adding to BACKGROUND
+		backgroundColorP.add(bPanel);
+		
+		//figure Color Block----------------------------
+		JPanel figureColorP = new JPanel();
+		figureColorP.setLayout(new GridLayout(3,1));
+		JLabel titleF = new JLabel("Fill Color");
+		//adding it to the background panel
+		figureColorP.add(titleF);
+			//blue
+		JButton blueButtonF = new JButton("blue");
+		blueButtonF.addActionListener(new FillerListener("blue"));
+			//orange
+		JButton orangeButtonF = new JButton("orange");
+		orangeButtonF.addActionListener(new FillerListener("orange"));
+		
+		JPanel cPanel = new JPanel();
+		cPanel.add(blueButtonF);
+		cPanel.add(orangeButtonF);
+		//adding them to the background
+		figureColorP.add(cPanel);
+			//yellow
+		JButton yellowButtonF = new JButton("yellow");
+		yellowButtonF.addActionListener(new FillerListener("yellow"));
+			//green
+		JButton greenButtonF = new JButton("green");
+		greenButtonF.addActionListener(new FillerListener("green"));
+		
+		JPanel dPanel = new JPanel();
+		dPanel.add(yellowButtonF);
+		dPanel.add(greenButtonF);
+		//Adding to BACKGROUND
+		figureColorP.add(dPanel);
+		
+		//Figures Panel--------------------------
+		JPanel figureChooseP = new JPanel();
+		figureChooseP.setLayout(new GridLayout(4,1));
+		
+		JButton rectangleButton = new JButton("Rectangle");
+		rectangleButton.addActionListener(new addShapeListener(1));
+		JPanel ePanel = new JPanel();
+		ePanel.add(rectangleButton);
+		
+		JButton circleButton = new JButton("Circle");
+		circleButton.addActionListener(new addShapeListener(2));
+		JPanel fPanel = new JPanel();
+		fPanel.add(circleButton);
+		
+		JButton triangleButton = new JButton("Triangle");
+		triangleButton.addActionListener(new addShapeListener(3));
+		JPanel gPanel = new JPanel();
+		gPanel.add(triangleButton);
+		
+		figureChooseP.add(new JLabel("Figure"));
+		figureChooseP.add(ePanel);
+		figureChooseP.add(fPanel);
+		figureChooseP.add(gPanel);
+		
+		//Send and Logout Block-----------------
+		JPanel sendLogPanel = new JPanel();
+		sendLogPanel.setLayout(new GridLayout(2,1));
+		
+		JButton sendButton = new JButton("Send");
+		sendButton.addActionListener(new SendListener());
+		JPanel hPanel = new JPanel();
+		hPanel.add(sendButton);
+		
+		JButton logButton = new JButton("Logout");
+		logButton.addActionListener(new LogoutListener());
+		JPanel iPanel = new JPanel();
+		iPanel.add(logButton);
+		
+		sendLogPanel.add(hPanel);
+		sendLogPanel.add(iPanel);
+		
+		//redo
+			
+		southPanel.add(backgroundColorP);
+		southPanel.add(figureColorP);
+		southPanel.add(figureChooseP);
+		southPanel.add(sendLogPanel);
+		this.add(southPanel, BorderLayout.SOUTH);
 		this.connect();
+	}
+	
+	private class FillerListener implements ActionListener{
+		private String _color;
+		public FillerListener(String color) {
+			_color = color;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			if (_color.equals("blue")) {
+				_dPanel.setHolderColor(java.awt.Color.BLUE);
+				_dPanel.repaint();
+				sendUpdate("FillColor", null, "blue", null);
+			} else if (_color.equals("green")) {
+				_dPanel.setHolderColor(java.awt.Color.GREEN);
+				_dPanel.repaint();
+				sendUpdate("FillColor", null, "green", null);
+			} else if (_color.equals("orange")) {
+				_dPanel.setHolderColor(java.awt.Color.ORANGE);
+				_dPanel.repaint();
+				sendUpdate("FillColor", null, "orange", null);
+			}else if (_color.equals("yellow")) {
+				_dPanel.setHolderColor(java.awt.Color.YELLOW);
+				_dPanel.repaint();
+				sendUpdate("FillColor", null, "yellow", null);
+			} else {
+			}
+		}
+	}
+	
+	private class BackgroundListener implements ActionListener{
+		private String _color;
+		public BackgroundListener(String color) {
+			_color = color;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			if (_color.equals("blue")) {
+				_dPanel.setBackground(java.awt.Color.BLUE);
+				_dPanel.repaint();
+				sendUpdate("Background", null, "blue", null);
+			} else if (_color.equals("green")) {
+				_dPanel.setBackground(java.awt.Color.GREEN);
+				_dPanel.repaint();
+				sendUpdate("Background", null, "green", null);
+			} else if (_color.equals("orange")) {
+				_dPanel.setBackground(java.awt.Color.ORANGE);
+				_dPanel.repaint();
+				sendUpdate("Background", null, "orange", null);
+			}else if (_color.equals("yellow")) {
+				_dPanel.setBackground(java.awt.Color.YELLOW);
+				_dPanel.repaint();
+				sendUpdate("Background", null, "yellow", null);
+			} else {
+				
+			}
+		}
+	}
+	
+	private class LogoutListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			try (
+					Socket soc = new Socket("localhost", 4444);
+					PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
+					BufferedReader in = new BufferedReader(new InputStreamReader(soc.getInputStream()));
+					) {
+				out.println("Disconnect");
+				out.println(_artistName);
+			} catch (UnknownHostException e1) {
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+	}
+	
+	private class SendListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String text = _messageArea.getText();
+			sendText(text);
+			 _messageArea.setText("");
+		}
+
+	}
+	
+	public void sendText(String message) {
+		try (
+				Socket soc = new Socket("localhost", 4444);
+				PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
+				BufferedReader in = new BufferedReader(new InputStreamReader(soc.getInputStream()));
+				) {
+			out.println("Text");
+			out.println(_artistName);
+			out.println(message);
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 	}
 	
 	private class addShapeListener implements ActionListener{
@@ -82,9 +291,9 @@ public class MainPanel extends JPanel {
 				shape.setBorderColor(java.awt.Color.GREEN);
 				shape.setBorderWidth(1);
 				shape.setLocation(30,30);
-				_dPanel.addShape(shape);
+				_dPanel.addShape(shape.getIdentifier(), shape);
 				sendCreate("rectangle", shape.getIdentifier());
-			} else {
+			} else if (_type == 2){
 				NetworkEllipse shape = new NetworkEllipse(_dPanel, Integer.toString(_nextIdentifier));
 				_nextIdentifier++;
 				//send it to the server
@@ -94,8 +303,22 @@ public class MainPanel extends JPanel {
 				shape.setBorderColor(java.awt.Color.GREEN);
 				shape.setBorderWidth(1);
 				shape.setLocation(30,30);
-				_dPanel.addShape(shape);
+				_dPanel.addShape(shape.getIdentifier(), shape);
 				sendCreate("ellipse", shape.getIdentifier());
+			} else if (_type == 3) {
+				NetworkTriangle shape = new NetworkTriangle(_dPanel, Integer.toString(_nextIdentifier));
+				_nextIdentifier++;
+				//send it to the server
+				shape.setSize(30,30);
+				shape.setVisible(true);
+				shape.setFillColor(java.awt.Color.BLUE);
+				shape.setBorderColor(java.awt.Color.GREEN);
+				shape.setBorderWidth(1);
+				shape.setLocation(30,30);
+				_dPanel.addShape(shape.getIdentifier(), shape);
+				sendCreate("triangle", shape.getIdentifier());
+			} else {
+				
 			}
 			
 		}
@@ -117,7 +340,7 @@ public class MainPanel extends JPanel {
 				_identifier = identifier;
 			}
 			out.println(_artistName);
-			out.println(_artistName + "is online now.");
+			out.println(_artistName + " is online now.");
 
 		} catch (UnknownHostException e1) {
 			// TODO Auto-generated catch block
@@ -148,7 +371,7 @@ public class MainPanel extends JPanel {
 		}
 	}
 	
-	public void sendUpdate(String type, String update1, String update2) {
+	public void sendUpdate(String typeOfChange, String figureId, String update1, String update2) {
 		try (
 				Socket soc = new Socket("localhost", 4444);
 				PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
@@ -157,13 +380,17 @@ public class MainPanel extends JPanel {
 			out.println("Send");
 			out.println("Update");
 			out.println(_artistName);
-			if (type.equals("Background")) {
+			out.println(figureId);//figure identifier
+			if (typeOfChange.equals("Background")) {
+				out.println("Background");
 				out.println(update1);
-			} else if (type.equals("Location")) {
+			} else if (typeOfChange.equals("Location")) {
+				out.println("Location");
 				out.println(update1);
 				out.println(update2);
-			} else {
-
+			} else if (typeOfChange.equals("FillColor")){
+				out.println("FillColor");
+				out.println(update1);
 			}
 		} catch (UnknownHostException e1) {
 			// TODO Auto-generated catch block

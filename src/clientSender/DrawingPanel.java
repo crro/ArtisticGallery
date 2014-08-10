@@ -8,17 +8,20 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
 import javax.swing.JPanel;
 
 public class DrawingPanel extends JPanel {
-	private ArrayList<Shape> _shapes;
+	private HashMap<String, Shape> _shapes;
 	private Shape _holderShape;
+	private String _holderId;
 	private MainPanel _mp;
 
 	public DrawingPanel(MainPanel mp) {
-		_shapes = new ArrayList<Shape>();
+		_shapes = new HashMap<String, Shape>();
+		this.setSize(500,500);
 		this.setPreferredSize(new Dimension(500, 500));
 		this.setBackground(java.awt.Color.WHITE);
 		this.addMouseListener(new ClickListener());
@@ -33,14 +36,14 @@ public class DrawingPanel extends JPanel {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D brush = (Graphics2D) g;//Coercion
-		int size = _shapes.size();
-		for (int i = 0; i < size; i++) {
-			_shapes.get(i).paint(brush);
+		Set<String> set = _shapes.keySet();
+		for (String key : set) {
+			_shapes.get(key).paint(brush);
 		}
 	}
 	
-	public void addShape(Shape s) {
-		_shapes.add(s);
+	public void addShape(String id, Shape s) {
+		_shapes.put(id, s);
 		this.repaint();
 	}
 	private class ClickListener implements MouseListener {
@@ -49,37 +52,47 @@ public class DrawingPanel extends JPanel {
 			System.out.println("clicked");
 			System.out.print("x: " + e.getX() + " ");
 			System.out.println("y: " + e.getY());
-			int size = _shapes.size();
-			for (int i = 0; i < size; i++) {
-				if (_shapes.get(i).contains(e.getPoint())) {
-					//here we can get
+			Set<String> set = _shapes.keySet();
+			boolean select = false;
+			for (String key : set) {
+				if (_shapes.get(key).contains(e.getPoint())) {
+					select = true;
 				}
+			}
+			if (!select) {
+				for (String key : set) {
+					_shapes.get(key).setBorderColor(java.awt.Color.GREEN);
+					_shapes.get(key).setBorderWidth(1);
+				}
+				_holderShape = null;
+				_holderId = null;
+				DrawingPanel.this.repaint();				
 			}
 		}
 		public void mousePressed (MouseEvent e) {
 			System.out.println("pressed");
-			int size = _shapes.size();
-			for (int i = 0; i < size; i++) {
-				if (_shapes.get(i).contains(e.getPoint())) {
-					_shapes.get(i).setBorderColor(java.awt.Color.RED);
-					_shapes.get(i).setBorderWidth(2);
-					DrawingPanel.this.repaint();
-					_holderShape = _shapes.get(i);
+			Set<String> set = _shapes.keySet();
+			for (String key : set) {
+				if (_shapes.get(key).contains(e.getPoint())) {
+					_shapes.get(key).setBorderColor(java.awt.Color.RED);
+					_shapes.get(key).setBorderWidth(2);			
+					_holderShape = _shapes.get(key);
+					_holderId = key;
 					break;
 				}
 			}
+			for (String key : set) {
+				if (key == _holderId) {
+					continue;
+				}
+				_shapes.get(key).setBorderColor(java.awt.Color.GREEN);
+				_shapes.get(key).setBorderWidth(1);
+				
+			}
+			DrawingPanel.this.repaint();
 		}
 		public void mouseReleased (MouseEvent e) {
-			System.out.println("released");
-			int size = _shapes.size();
-			for (int i = 0; i < size; i++) {
-				if (_shapes.get(i).contains(e.getPoint())) {
-					_shapes.get(i).setBorderColor(java.awt.Color.GREEN);
-					_shapes.get(i).setBorderWidth(1);
-					DrawingPanel.this.repaint();
-					_holderShape = null;
-				}
-			}
+			
 		}
 		public void mouseEntered (MouseEvent e) {}
 		public void mouseExited (MouseEvent e) {}
@@ -92,9 +105,12 @@ public class DrawingPanel extends JPanel {
 			System.out.println("clicked before dragf");
 			System.out.print("x: " + e.getX() + " ");
 			System.out.println("y: " + e.getY());
-			_holderShape.setLocation(e.getX(), e.getY());
-			DrawingPanel.this.repaint();
-			_mp.sendUpdate("Location", String.valueOf(e.getX()), String.valueOf(e.getY()));
+			if (_holderShape != null) {
+				_holderShape.setLocation(e.getX(), e.getY());
+				DrawingPanel.this.repaint();
+				_mp.sendUpdate("Location", _holderId, String.valueOf(e.getX()), String.valueOf(e.getY()));
+			}
+			
 			//Here is where we need to send the signal to the server
 			//We probably need a reference to the MainPanel here.
 		}
@@ -103,6 +119,11 @@ public class DrawingPanel extends JPanel {
 			System.out.println("y: " + e.getY());
 		}
 		
+	}
+	
+	public void setHolderColor(java.awt.Color color) {
+		_holderShape.setFillColor(color);
+		//this.repaint();
 	}
 
 }
