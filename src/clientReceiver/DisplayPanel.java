@@ -30,5 +30,9 @@ public class DisplayPanel extends JPanel {
 	public DrawingPanel getDrawingPanel() {
 		return _dp;
 	}
+	public void resetPanel() {
+		_textPane.setText("");
+		_dp.reset();
+	}
 
 }

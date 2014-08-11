@@ -15,7 +15,11 @@ import java.net.UnknownHostException;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.JTextArea;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 
 public class MainPanel extends JPanel {
@@ -31,9 +35,10 @@ public class MainPanel extends JPanel {
 		//Setting th Layout
 		this.setLayout(new BorderLayout());
 		_messageArea = new JTextArea();
+		_messageArea.setSize(200, 500);
 		_messageArea.setPreferredSize(new Dimension(200, 500));
 		_messageArea.setVisible(true);
-		_artistName = " van Gogh";
+		_artistName = "Pietro";
 		_nextIdentifier = 0;
 		
 		this.setSize(725, 700);
@@ -41,13 +46,47 @@ public class MainPanel extends JPanel {
 		this.setVisible(true);
 		//Adding the text panel and then adding the JTextArea
 		JPanel textPanel = new JPanel();
-		textPanel.add(_messageArea);
+		textPanel.setLayout(new BorderLayout());
+		textPanel.setSize(200, 500);
+		textPanel.setPreferredSize(new Dimension(200, 500));
+		JPanel kPanel  = new JPanel();
+		kPanel.add(_messageArea);
+		textPanel.add(kPanel, BorderLayout.CENTER);
+		JButton sendButton = new JButton("Send");
+		sendButton.addActionListener(new SendListener());
+		JPanel hPanel = new JPanel();
+		hPanel.add(sendButton);
+		textPanel.add(hPanel, BorderLayout.SOUTH);
+		
+		
 		this.add(textPanel, BorderLayout.EAST);
 		
+		JSlider height = new JSlider(JSlider.VERTICAL, 0, 500, 30);
+		height.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				JSlider js = (JSlider) arg0.getSource();
+				_dPanel.changeHeight(js.getValue());
+			}
+		});
+		JSlider width = new JSlider(0, 500, 30);
+		width.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				JSlider js = (JSlider) e.getSource();
+				_dPanel.changeWidth(js.getValue());
+			}
+		});
 		_dPanel = new DrawingPanel(this);
 		JPanel dcPanel = new JPanel();
-		dcPanel.add(_dPanel);
+		dcPanel.setLayout(new BorderLayout());
+		dcPanel.add(_dPanel, BorderLayout.CENTER);
+		dcPanel.add(height, BorderLayout.EAST);
+		dcPanel.add(width, BorderLayout.SOUTH);
 		this.add(dcPanel, BorderLayout.CENTER);
+		
 		
 		//So this will be the SoutPanel
 		JPanel southPanel = new JPanel();
@@ -56,26 +95,26 @@ public class MainPanel extends JPanel {
 		//Background Color block-----------------------------
 		JPanel backgroundColorP = new JPanel();
 		backgroundColorP.setLayout(new GridLayout(3,1));
-		JLabel title = new JLabel("Background Color");
+		JLabel title = new JLabel("Background Color", JLabel.CENTER);
 		//adding it to the background panel
 		backgroundColorP.add(title);
 			//blue
-		JButton blueButton = new JButton("blue");
+		JButton blueButton = new JButton(" blue  ");
 		blueButton.addActionListener(new BackgroundListener("blue"));
 			//orange
 		JButton orangeButton = new JButton("orange");
 		orangeButton.addActionListener(new BackgroundListener("orange"));
 		
 		JPanel aPanel = new JPanel();
-		aPanel.add(blueButton);
 		aPanel.add(orangeButton);
+		aPanel.add(blueButton);
 		//adding them to the background
 		backgroundColorP.add(aPanel);
 			//yellow
-		JButton yellowButton = new JButton("yellow");
+		JButton yellowButton = new JButton("yellow  ");
 		yellowButton.addActionListener(new BackgroundListener("yellow"));
 			//green
-		JButton greenButton = new JButton("green");
+		JButton greenButton = new JButton("green ");
 		greenButton.addActionListener(new BackgroundListener("green"));
 		
 		JPanel bPanel = new JPanel();
@@ -87,26 +126,26 @@ public class MainPanel extends JPanel {
 		//figure Color Block----------------------------
 		JPanel figureColorP = new JPanel();
 		figureColorP.setLayout(new GridLayout(3,1));
-		JLabel titleF = new JLabel("Fill Color");
+		JLabel titleF = new JLabel("Fill Color", JLabel.CENTER);
 		//adding it to the background panel
 		figureColorP.add(titleF);
 			//blue
-		JButton blueButtonF = new JButton("blue");
+		JButton blueButtonF = new JButton(" blue  ");
 		blueButtonF.addActionListener(new FillerListener("blue"));
 			//orange
 		JButton orangeButtonF = new JButton("orange");
 		orangeButtonF.addActionListener(new FillerListener("orange"));
 		
 		JPanel cPanel = new JPanel();
-		cPanel.add(blueButtonF);
 		cPanel.add(orangeButtonF);
+		cPanel.add(blueButtonF);
 		//adding them to the background
 		figureColorP.add(cPanel);
 			//yellow
-		JButton yellowButtonF = new JButton("yellow");
+		JButton yellowButtonF = new JButton("yellow  ");
 		yellowButtonF.addActionListener(new FillerListener("yellow"));
 			//green
-		JButton greenButtonF = new JButton("green");
+		JButton greenButtonF = new JButton("green ");
 		greenButtonF.addActionListener(new FillerListener("green"));
 		
 		JPanel dPanel = new JPanel();
@@ -124,37 +163,34 @@ public class MainPanel extends JPanel {
 		JPanel ePanel = new JPanel();
 		ePanel.add(rectangleButton);
 		
-		JButton circleButton = new JButton("Circle");
-		circleButton.addActionListener(new addShapeListener(2));
-		JPanel fPanel = new JPanel();
-		fPanel.add(circleButton);
 		
 		JButton triangleButton = new JButton("Triangle");
 		triangleButton.addActionListener(new addShapeListener(3));
 		JPanel gPanel = new JPanel();
 		gPanel.add(triangleButton);
 		
-		figureChooseP.add(new JLabel("Figure"));
+		JButton circleButton = new JButton("Circle");
+		circleButton.addActionListener(new addShapeListener(2));
+		JPanel fPanel = new JPanel();
+		fPanel.add(circleButton);
+		
+		figureChooseP.add(new JLabel("Figure", JLabel.CENTER));
 		figureChooseP.add(ePanel);
-		figureChooseP.add(fPanel);
 		figureChooseP.add(gPanel);
+		figureChooseP.add(fPanel);
 		
 		//Send and Logout Block-----------------
 		JPanel sendLogPanel = new JPanel();
-		sendLogPanel.setLayout(new GridLayout(2,1));
-		
-		JButton sendButton = new JButton("Send");
-		sendButton.addActionListener(new SendListener());
-		JPanel hPanel = new JPanel();
-		hPanel.add(sendButton);
+		sendLogPanel.setLayout(new BorderLayout());
 		
 		JButton logButton = new JButton("Logout");
 		logButton.addActionListener(new LogoutListener());
 		JPanel iPanel = new JPanel();
+		iPanel.setBorder(new EmptyBorder(0 , 0 , 50, 15));
 		iPanel.add(logButton);
 		
-		sendLogPanel.add(hPanel);
-		sendLogPanel.add(iPanel);
+		//sendLogPanel.add(hPanel);
+		sendLogPanel.add(iPanel, BorderLayout.SOUTH);
 		
 		//redo
 			
@@ -238,10 +274,13 @@ public class MainPanel extends JPanel {
 				out.println("Send");
 				out.println("Disconnect");
 				out.println(_artistName);
+				System.exit(0);
 			} catch (UnknownHostException e1) {
-				e1.printStackTrace();
+				// TODO Auto-generated catch block
+				_messageArea.setText("Unknown Host. \nClose and try again later");
 			} catch (IOException e1) {
-				e1.printStackTrace();
+				// TODO Auto-generated catch block
+				_messageArea.setText("Server Unavailable. \nClose and try again later");
 			}
 		}
 	}
@@ -267,9 +306,11 @@ public class MainPanel extends JPanel {
 			out.println(_artistName);
 			out.println(message + "\n");
 		} catch (UnknownHostException e1) {
-			e1.printStackTrace();
+			// TODO Auto-generated catch block
+			_messageArea.setText("Unknown Host. \nClose and try again later");
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			// TODO Auto-generated catch block
+			_messageArea.setText("Server Unavailable. \nClose and try again later");
 		}
 	}
 	
@@ -282,7 +323,6 @@ public class MainPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			
-			System.out.println("YOLOOOO");
 			if (_type == 1) {
 				NetworkRectangle shape = new NetworkRectangle(_dPanel, Integer.toString(_nextIdentifier));
 				_nextIdentifier++;
@@ -346,10 +386,10 @@ public class MainPanel extends JPanel {
 
 		} catch (UnknownHostException e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			_messageArea.setText("Unknown Host. \nClose and try again later");
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			_messageArea.setText("Server Unavailable. \nClose and try again later");
 		}
 	}
 	
@@ -366,10 +406,10 @@ public class MainPanel extends JPanel {
 			out.println(type);
 		} catch (UnknownHostException e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			_messageArea.setText("Unknown Host. \nClose and try again later");
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			_messageArea.setText("Server Unavailable. \nClose and try again later");
 		}
 	}
 	
@@ -396,13 +436,17 @@ public class MainPanel extends JPanel {
 			} else if (typeOfChange.equals("FillColor")){
 				out.println("FillColor");
 				out.println(update1);
+			} else if (typeOfChange.equals("Size")){
+				out.println("Size");
+				out.println(update1);
+				out.println(update2);
 			}
 		} catch (UnknownHostException e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			_messageArea.setText("Unknown Host. \nClose and try again later");
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			_messageArea.setText("Server Unavailable. \nClose and try again later");
 		}
 
 	}

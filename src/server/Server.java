@@ -28,19 +28,8 @@ public class Server {
 				PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
 				BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 				String fromClient = in.readLine();
-				System.out.println(fromClient);
+				//System.out.println(fromClient);
 				if (fromClient.equals("Connect")) {
-					
-					/*File file = new File("sample.txt");
-					 
-					if file doesnt exists, then create it
-					if (!file.exists()) {
-						file.createNewFile();
-					}*/
-					//FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
-					//BufferedWriter bw = new BufferedWriter(fw);
-					//bw.write(fromClient + "\n");
-					//bw.close();
 					
 					out.println(_nextUniqueID);
 					//Send the message
@@ -49,22 +38,9 @@ public class Server {
 					this.sendMessage(in.readLine());//Send the connection message
 				} else if (fromClient.equals("Receive")) {
 					out.println("Connection Established: Receive");
-//					File file = new File("sample.txt");
-//					 
-//					// if file doesn't exists, then create it
-//					if (!file.exists()) {
-//						_sockets.add(new Holder(clientSocket, out));
-//						continue;
-//					}
-//					FileReader fw = new FileReader(file.getAbsoluteFile());
-//					BufferedReader bw = new BufferedReader(fw);
-//					String line;
-//					while ((line = in.readLine()) != null) {
-//						out.println(line);
-//					}
-//					bw.close();
+//					
 					_sockets.add(new Holder(clientSocket, out));
-					System.out.println("The size of the arraylist is: " + _sockets.size());
+					//System.out.println("The size of the arraylist is: " + _sockets.size());
 				}  else if (fromClient.equals("Send")) {
 					//This gets called every time. We have create and update.
 					fromClient = in.readLine();
@@ -89,7 +65,11 @@ public class Server {
 							this.sendMessage(in.readLine());//x
 							this.sendMessage(in.readLine());//y
 						} else if (typeOfChange.equals("FillColor")) {
-							this.sendMessage(in.readLine());
+							this.sendMessage(in.readLine());//color
+						} else if (typeOfChange.equals("Size")) {
+							this.sendMessage(in.readLine());//width
+							this.sendMessage(in.readLine());//height
+							
 						}
 					} else if (fromClient.equals("Disconnect")) {
 						//Invalid command
@@ -115,7 +95,7 @@ public class Server {
 		int size = _sockets.size();
 		for (int i = 0; i < size; i++) {
 			//Figure out if client is not there, do some error checking. 
-			System.out.println(_sockets.get(i).getSocket().isConnected());
+			//System.out.println(_sockets.get(i).getSocket().isConnected());
 			_sockets.get(i).getWriter().println(message);
 		}
 	}

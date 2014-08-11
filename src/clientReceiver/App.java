@@ -72,6 +72,9 @@ public class App {
 					} else if (typeOfChange.equals("FillColor")){
 						_mPanel.updateShape(artistName, figureId,
 								typeOfChange, in.readLine(), null);
+					} else if (typeOfChange.equals("Size")){
+						_mPanel.updateShape(artistName, figureId,
+								typeOfChange, in.readLine(), in.readLine());
 					}
 				} else if (fromServer.equals("Disconnect")){
 					_mPanel.removeFromPanels(in.readLine());

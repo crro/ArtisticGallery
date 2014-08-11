@@ -41,57 +41,19 @@ public class MainPanel extends JPanel{
 		
 		this.add(_artistPanel, BorderLayout.CENTER);
 		
-		_connectButton =  new JButton("Connect");
-		_connectButton.addActionListener(new connectListener());
 		
-		this.add(_connectButton, BorderLayout.SOUTH);
 		
 		this.setSize(1200, 1200);
 		this.setPreferredSize(new Dimension(900, 900));
 		this.setVisible(true);
-//		try (Socket socket = new Socket("localhost", 4444)) {
-//			receive(socket);
-//		} catch (UnknownHostException e1) {
-//			//Handle error cases 
-//			e1.printStackTrace();
-//		}catch (IOException e1) {
-//			//Handle error cases
-//			e1.printStackTrace();
-//		} catch (BadLocationException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-		System.out.println("Yolo");
 		
 	}
 	
-	private class connectListener implements ActionListener{
-		private int _type;
-		public connectListener() {
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-//			DisplayPanel dp = _artists.remove("One");
-//			DrawingPanel drawP = dp.getDrawingPanel();
-//			NetworkEllipse shape = new NetworkEllipse(dp.getDrawingPanel(), "0");
-//			shape.setSize(30,30);
-//			shape.setVisible(true);
-//			shape.setFillColor(java.awt.Color.BLUE);
-//			shape.setBorderWidth(1);
-//			shape.setLocation(30,30);
-//			drawP.addShape("0", shape);
-			
-			
-		}
-
-
-	}
-	
-	
 	public void createShape(String artist, String id, String type) {
-		String artistName = artist;
 		DisplayPanel dp = _artists.get(artist);
+		if (dp == null) {
+			return;
+		}
 		String typeOfFigure = type;
 		if (typeOfFigure.equals("triangle")) {
 			DrawingPanel drawP = dp.getDrawingPanel(); 
@@ -130,14 +92,19 @@ public class MainPanel extends JPanel{
 	public void updateShape(String artistName, String id, 
 		String typeOfChange, String update1, String update2) {
 		//2 or three depends on the action
-		DrawingPanel drawP = _artists.get(artistName).getDrawingPanel();
+		DisplayPanel dp =  _artists.get(artistName);
+		if (dp == null) {
+			return;
+		}
+		DrawingPanel drawP = dp.getDrawingPanel();
 		if (typeOfChange.equals("Background")) {
 			drawP.changeBackground(update1);
 		} else if (typeOfChange.equals("Location")) {
 			drawP.moveShape(id, update1, update2);
 		} else if (typeOfChange.equals("FillColor")){
 			drawP.repaintShape(id, update1);
-			
+		} else if (typeOfChange.equals("Size")){
+			drawP.resizeShape(id, update1, update2);
 		}
 	}
 	public void addToPanel(String artistName, String welcomeMessage) {
@@ -174,23 +141,26 @@ public class MainPanel extends JPanel{
 	}
 
 	public void removeFromPanels(String artistName) {
-		DisplayPanel dp;
-		if (_activeArtists > 1) {
+		DisplayPanel dp = _artists.remove(artistName);
+		if (dp == null) {
+			return;
+		}
+		if (_activeArtists > 0) {
 			switch (_activeArtists) {
 				case 1:
-					dp = _artists.remove(artistName);
+					dp.resetPanel();
 					_artists.put("One", dp);
 					break;
 				case 2:
-					dp = _artists.remove(artistName);
+					dp.resetPanel();
 					_artists.put("Two", dp);
 					break;
 				case 3:
-					dp = _artists.remove(artistName);
+					dp.resetPanel();
 					_artists.put("Three", dp);
 					break;
 				case 4:
-					dp = _artists.remove(artistName);
+					dp.resetPanel();
 					_artists.put("Four", dp);
 					break;
 				default:
@@ -203,6 +173,9 @@ public class MainPanel extends JPanel{
 
 	public void sendText(String artistName, String text) {
 		DisplayPanel dp = _artists.get(artistName);
+		if (dp  == null) {
+			return;
+		}
 		dp.addText(text);
 	}
 }

@@ -18,7 +18,7 @@ public class DrawingPanel extends JPanel{
 	public DrawingPanel() {
 		_shapes = new HashMap<String, Shape>();
 		this.setPreferredSize(new Dimension(200, 200));
-		this.setBackground(java.awt.Color.YELLOW);
+		this.setBackground(java.awt.Color.WHITE);
 		this.setVisible(true);
 	}
 	/*
@@ -72,6 +72,12 @@ public class DrawingPanel extends JPanel{
 		}
 		this.repaint();
 	}
+	
+	public void resizeShape(String key, String width, String height) {
+		Shape s = _shapes.get(key);
+		s.setSize(Double.parseDouble(width), Double.parseDouble(height));
+		this.repaint();
+	}
 
 	//This method is called when a piece needs to move from the server.
 	public void moveShape(String key, String x, String y) {
@@ -87,5 +93,9 @@ public class DrawingPanel extends JPanel{
 		Shape s = _shapes.get(id);
 		s.setLocation(Double.parseDouble(x), Double.parseDouble(y));
 	}
-
+	public void reset() {
+		_shapes = new HashMap<String, Shape>();
+		this.setBackground(java.awt.Color.WHITE);
+		this.repaint();
+	}
 }

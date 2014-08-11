@@ -49,9 +49,6 @@ public class DrawingPanel extends JPanel {
 	private class ClickListener implements MouseListener {
 		
 		public void mouseClicked(MouseEvent e) {
-			System.out.println("clicked");
-			System.out.print("x: " + e.getX() + " ");
-			System.out.println("y: " + e.getY());
 			Set<String> set = _shapes.keySet();
 			boolean select = false;
 			for (String key : set) {
@@ -72,7 +69,6 @@ public class DrawingPanel extends JPanel {
 			}
 		}
 		public void mousePressed (MouseEvent e) {
-			System.out.println("pressed");
 			Set<String> set = _shapes.keySet();
 			for (String key : set) {
 				if (_shapes.get(key).contains(e.getPoint())) {
@@ -104,9 +100,6 @@ public class DrawingPanel extends JPanel {
 		public MotionListener() {
 		}
 		public void mouseDragged(MouseEvent e) {
-			System.out.println("clicked before dragf");
-			System.out.print("x: " + e.getX() + " ");
-			System.out.println("y: " + e.getY());
 			if (_holderShape != null) {
 				_holderShape.setLocation(e.getX(), e.getY());
 				DrawingPanel.this.repaint();
@@ -117,8 +110,6 @@ public class DrawingPanel extends JPanel {
 			//We probably need a reference to the MainPanel here.
 		}
 		public void mouseMoved(MouseEvent e) {
-			System.out.print("x: " + e.getX() + " ");
-			System.out.println("y: " + e.getY());
 		}
 		
 	}
@@ -132,6 +123,23 @@ public class DrawingPanel extends JPanel {
 			_holderShape.setFillColor(color);			
 		}
 		//this.repaint();
+	}
+	
+	
+	
+	public void changeWidth(double width) {
+		if (_holderShape != null) {
+			_holderShape.setSize(width, _holderShape.getHeight());
+			this.repaint();
+			_mp.sendUpdate("Size", _holderId, String.valueOf(width), String.valueOf(_holderShape.getHeight()));
+		}
+	}
+	public void changeHeight(double height) {
+		if (_holderShape != null) {
+			_holderShape.setSize(_holderShape.getWidth(), height);
+			this.repaint();
+			_mp.sendUpdate("Size", _holderId, String.valueOf(_holderShape.getWidth()),  String.valueOf(height));
+		}
 	}
 
 }
