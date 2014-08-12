@@ -5,6 +5,7 @@ import gfx.Shape;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -29,6 +30,7 @@ public class DrawingPanel extends JPanel{
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D brush = (Graphics2D) g;//Coercion
+		brush.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		Set<String> keys = _shapes.keySet();
 		for (String key : keys) {
 			_shapes.get(key).paint(brush);
